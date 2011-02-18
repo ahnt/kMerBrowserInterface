@@ -38,7 +38,7 @@ public class Node {
     float dx = position.getX()-x;
     float dy = position.getY()-y;
     
-    return (abs(dx) < w/2 && abs(dy)<h/2);
+    return (abs(dx) < w/0.2 && abs(dy)<h/0.2);
   }
   
   public Node(Vector3D v) {
@@ -69,7 +69,7 @@ public class Node {
     return position.getY();
   }
   
-  public void draw(float xOffset,float yOffset,float zoom,PFont font) {
+  public void draw(float xOffset,float yOffset,float zoom,PFont font,boolean withText) {
     stroke(0);
     fill(255);
     ellipse(getX(), getY(), h, w);

@@ -10,26 +10,21 @@ import os.path
 import jinja2
 from quixote.form import Form, StringWidget, PasswordWidget
 from sqlite3 import *
-import khmer
+import khmer 
 from screed import ScreedDB
 from quixote.util import StaticFile
 
 class myFirstUI(Directory):
 	_q_exports = ['','firstkMer','kmerNeighborhood']
+	theK=17
 	
 	def __init__(self):
 		# the 12 is the size of K which can be set here:
-		self.ktable=khmer.new_ktable(12)
-		
+		#self.ktable=khmer.new_ktable(12)
+		self.ktable=khmer.new_hashbits(self.theK,1e9,4)
 		#specify the files you want to load, they have to be screed files
-		names=('chr01.fsa','chr02.fsa')
-
-#       this was used for the entire yeast genome		
-#		,'chr03.fsa','chr04.fsa',
-#		'chr05.fsa','chr06.fsa','chr07.fsa',
-#		'chr08.fsa','chr09.fsa','chr10.fsa',
-#		'chr11.fsa','chr12.fsa','chr13.fsa',
-#		'chr14.fsa','chr15.fsa','chr16.fsa')
+		names=('chr01.fsa','chr02.fsa','chr03.fsa','chr04.fsa','chr05.fsa','chr06.fsa','chr07.fsa',
+		'chr08.fsa','chr09.fsa','chr10.fsa','chr11.fsa','chr12.fsa','chr13.fsa','chr14.fsa','chr15.fsa','chr16.fsa')
 
 		for name in names:
 			self.fadb=ScreedDB(name)
@@ -52,8 +47,8 @@ class myFirstUI(Directory):
 	def addAllKmers(self,currentKmer,depth,maxDepth):
 		if depth<maxDepth:
 			L=['A','C','G','T']
-			rawStringLead=currentKmer[0:(self.ktable.ksize()-1)]
-			rawStringTrail=currentKmer[1:self.ktable.ksize()]
+			rawStringLead=currentKmer[0:(self.theK-1)]
+			rawStringTrail=currentKmer[1:self.theK]
 			for l in L:
 				s=rawStringTrail+l
 				if self.ktable.get(s)!=0: 
@@ -107,6 +102,6 @@ if __name__ == '__main__':
 	# please choose your publisher here:
 	#keep in mind that this publisher has to match the kmerBrowserInterface URL!
 	
-	print 'creating demo listening on http://user-e47d8b.user.msu.edu:8080/'
+	print 'creating demo listening on http://vertex.beacon.msu.edu:8080/'
 	#run(create_publisher, host='localhost', port=8080)
-	run(create_publisher, host='user-e47d8b.user.msu.edu', port=8080)
+	run(create_publisher, host='vertex.beacon.msu.edu', port=8080)

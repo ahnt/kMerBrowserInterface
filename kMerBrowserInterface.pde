@@ -1,11 +1,15 @@
-int depth=4;
+int depth=10;
 int xDim=600;
 int yDim=600;
 int sx,sy;
 HashMap nodeNames;
+boolean textIsOn=true;
 
-String theURL="http://user-e47d8b.user.msu.edu:8080/kmerNeighborhood";
-String startingKmer="TACTGAAGGAGG";
+String theURL="http://vertex.beacon.msu.edu:8080/kmerNeighborhood";
+//String startingKmer="TACTGAAGGAGGAA";
+//  String startingKmer="TTTTCTATAACTGAAGGAGGA"; 21
+  String startingKmer="TTTTCTATAACTGAAGG";
+
 
 Graph g = buildGraph(theURL+"?kmer="+startingKmer+"&n="+depth);
 
@@ -26,6 +30,8 @@ void mouseWheel(int delta) {
 }
 
 void keyPressed() {
+  if((key=='t')||(key=='T'))
+    textIsOn=!textIsOn;
   if (key == '[') {
     localZoom *= 2.0;
   } else if (key == ']') {
@@ -116,7 +122,7 @@ void draw() {
   background(0);
   if (g != null) {
     doLayout();
-    g.draw(localXOffset,localYOffset,localZoom,font);  
+    g.draw(localXOffset,localYOffset,localZoom,font,textIsOn);  
   }
   fill(128,128,128,255);
   rect(xDim-64,0,64,48);
@@ -152,6 +158,7 @@ void doLayout() {
   //calculate the anti-gravitational forces on each node
   //this is the N^2 shittiness that needs to be optimized
   //TODO: at least make it N^2/2 since forces are symmetrical
+  
   for (int i=0; i<g.getNodes().size(); i++) {
     ForcedNode a = (ForcedNode)g.getNodes().get(i);
     for (int j=0; j<g.getNodes().size(); j++) {
@@ -215,11 +222,13 @@ Graph buildGraphUsingTemplateGraph(Graph original,String filename){
   }
   for(int i=int(lines[0])+1;i<lines.length;i++){
     String[] sublist=split(lines[i],'\t');
-    Node a = (Node)g.getNodes().get((Integer)nodeNames.get(sublist[0]));
-    Node b = (Node)g.getNodes().get((Integer)nodeNames.get(sublist[1]));
-    SpringEdge e = new SpringEdge(a, b);
-    e.setNaturalLength(random(20,22));
-    g.addEdge(e);
+    if((nodeNames.get(sublist[0])!=null)&&(nodeNames.get(sublist[1])!=null)){
+    	Node a = (Node)g.getNodes().get((Integer)nodeNames.get(sublist[0]));
+    	Node b = (Node)g.getNodes().get((Integer)nodeNames.get(sublist[1]));
+    	SpringEdge e = new SpringEdge(a, b);
+    	e.setNaturalLength(random(20,22));
+    	g.addEdge(e);
+    }
   }
   return g;
 }
@@ -243,11 +252,13 @@ Graph buildGraph(String filename) {
   }
   for(int i=int(lines[0])+1;i<lines.length;i++){
     String[] sublist=split(lines[i],'\t');
-    Node a = (Node)g.getNodes().get((Integer)nodeNames.get(sublist[0]));
-    Node b = (Node)g.getNodes().get((Integer)nodeNames.get(sublist[1]));
-    SpringEdge e = new SpringEdge(a, b);
-    e.setNaturalLength(random(19,22));
-    g.addEdge(e);
+    if((nodeNames.get(sublist[0])!=null)&&(nodeNames.get(sublist[1])!=null)){
+    	Node a = (Node)g.getNodes().get((Integer)nodeNames.get(sublist[0]));
+    	Node b = (Node)g.getNodes().get((Integer)nodeNames.get(sublist[1]));
+    	SpringEdge e = new SpringEdge(a, b);
+    	e.setNaturalLength(random(20,22));
+    	g.addEdge(e);
+    }
   }
   return g;
 }

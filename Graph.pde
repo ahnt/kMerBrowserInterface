@@ -106,7 +106,7 @@ public class Graph {
     return nodes;
   }
     
-  public void draw(float xOffset,float yOffset,float zoom,PFont font) {
+  public void draw(float xOffset,float yOffset,float zoom,PFont font,boolean withText) {
     for (int i=0; i<edges.size(); i++) {
       Edge e = (Edge)edges.get(i);
       e.draw(xOffset,yOffset,zoom);
@@ -114,7 +114,7 @@ public class Graph {
     
     for (int i=0; i<nodes.size(); i++) {
       Node n = (Node)nodes.get(i);
-      n.draw(xOffset,yOffset,zoom,font);
+      n.draw(xOffset,yOffset,zoom,font,withText);
     }
 
   }

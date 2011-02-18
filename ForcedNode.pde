@@ -34,7 +34,7 @@ public class ForcedNode extends Node {
       f = f.add(v);
   }
 
-  public void draw(float xOffset,float yOffset,float zoom,PFont font) {
+  public void draw(float xOffset,float yOffset,float zoom,PFont font,boolean withText) {
     //super.draw();
     int localFontSize=8;
     int localAlpha=80;
@@ -55,9 +55,11 @@ public class ForcedNode extends Node {
     }
     
     ellipse((getX()*zoom)+xOffset, (getY()*zoom)+yOffset, h, w);
-    fill(255,255,255,localAlpha);
-    textFont(font, localFontSize); 
-    text(label,(getX()*zoom)+xOffset, (getY()*zoom)+yOffset);      
+    if(withText){
+      fill(255,255,255,localAlpha);
+      textFont(font, localFontSize); 
+      text(label,(getX()*zoom)+xOffset, (getY()*zoom)+yOffset);
+    }      
   }
 }
 
